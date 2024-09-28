@@ -1,0 +1,23 @@
+# Ignore the virtual environment folder
+venv/
+
+# Ignore Python bytecode files
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignore the environment variable files (if using .env)
+.env
+
+# Ignore database files (for SQLite)
+*.sqlite3
+*.db
+
+# Ignore VSCode settings folder 
+.vscode/
+
+# Ignore log files
+*.log
+
+#Ignore files created by macOS
+.DS_Store
