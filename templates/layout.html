@@ -6,11 +6,27 @@
 
         <link href="/static/styles.css" rel="stylesheet">
 
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+
+        <!-- Web Icon -->
         <link href="/static/favicon_io/favicon.ico" rel="icon">
+
+        <!-- Icons on the html code -->
+        <script src="https://kit.fontawesome.com/2a36fe9429.js" crossorigin="anonymous"></script>
 
         <title>Expense Tracker: {% block title %}{% endblock %}</title>
     </head>
     <body>
+        <!-- Log In Required Navigation -->
+        <div class="div-nav-login">
+            <nav>
+                <i class="fa-solid fa-square-poll-vertical"></i>
+                <ul>
+                    <li>Log In</li>
+                    <li>Register</li>
+                </ul>
+            </nav>
+        </div>
         <main>
             {% block main %}{% endblock %}
         </main>

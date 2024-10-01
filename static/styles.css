@@ -1,0 +1,38 @@
+* {
+    margin: 0;
+    padding:0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #fff;
+}
+
+/* ------ login navigation ----- */
+.div-nav-login {
+    background-color: #E8E8E8;
+}
+
+.div-nav-login nav{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 20px 40px;
+}
+
+.div-nav-login nav ul{
+    list-style-type: none;
+    display: flex;
+}
+
+.div-nav-login nav ul li{
+    padding: 10px;
+    font-size: 18px;
+}
+
+.div-nav-login nav i{
+    font-size: 50px;
+}
+
+
