@@ -21,3 +21,6 @@ __pycache__/
 
 #Ignore files created by macOS
 .DS_Store
+
+#Ignore flask sessions
+flask_sessions/
