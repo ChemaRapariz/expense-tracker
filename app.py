@@ -27,3 +27,10 @@ cursor = connect.cursor()
 def index():
     # Testing the local server and phpLiteAdmin
     return render_template("index.html")
+
+@app.route('/register', methods=["GET","POST"])
+def register():
+    if request.method == "POST":
+        return render_template("register.html")
+    else:
+        return render_template("register.html")
