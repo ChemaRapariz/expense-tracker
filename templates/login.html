@@ -6,9 +6,9 @@ Log In
 
 {% block main %}
 <h1>Log In</h1>
-<form>
-    <input name="name" placeholder="Name" autofocus autocomplete="off" type="text">
+<form method="post" action="/login">
+    <input name="username" placeholder="Name" autofocus autocomplete="off" type="text">
     <input name="password" placeholder="Password" type="password">
-    <input type="submit" value="Submit" method="post" action="/login">
+    <input type="submit" value="Submit">
 </form>
 {% endblock %}
