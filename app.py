@@ -30,7 +30,38 @@ def index():
 @app.route('/login', methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        # Check if the user is logged in
+        # Check if the user is registered
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        # Get the database connection
+        db = get_db()
+
+        # Create a cursor
+        cursor = db.cursor()
+
+        # Check if the username is in the database
+        cursor.execute("SELECT * FROM users WHERE username = ?", (username,))
+        current_user = cursor.fetchone()
+
+        if not current_user:
+            flash("Username is not registered")
+            return redirect('/login')
+        elif current_user:
+            username = current_user["username"]
+            hashed_password = current_user["hashed_passwords"]
+        
+
+        # Check if the password send through the form is correct
+        if not check_password_hash(hashed_password, password):
+            flash("Incorrect password")
+            return redirect('/login')
+    
+        # Flash message, login completed  
+        flash("Logged In Correctly")
+
+        # Store user data in session
+        session['username'] = username
         return redirect("/")
     else:
         return render_template("login.html")
@@ -75,6 +106,7 @@ def register():
         # Check the lenght of the password
         if len(password) < 8 or len(confirm_password) < 8:
             flash("Password should be at least 8 characters long")
+            return redirect("/register")
 
         # Check if both passwords match
         if password != confirm_password:
@@ -90,10 +122,8 @@ def register():
         # Commit changes and close the connection
         db.commit()
 
-        # Store user data in session
-        session['username'] = username
-
         # Flash registered message
+        flash("Registered correctly!")
 
         return redirect("/login")
     else:
