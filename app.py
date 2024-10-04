@@ -31,9 +31,9 @@ def index():
 def login():
     if request.method == "POST":
         # Check if the user is logged in
-        return render_template("/")
+        return redirect("/")
     else:
-        return render_template("/login.html")
+        return render_template("login.html")
 
 @app.route('/register', methods=["GET","POST"])
 def register():
@@ -41,17 +41,50 @@ def register():
         # Store the data of the user that registers
         username = request.form.get('username')
         password = request.form.get('password')
-
-        # Check the data introduced
-
-        # Generate password hash
-        hash = generate_password_hash(password, method="pbkdf2", salt_length=16)
+        confirm_password = request.form.get('confirm_password')
 
         # Get the database connection
         db = get_db()
 
-        # Create a cursor and execute the insert
+        # Create a cursor
         cursor = db.cursor()
+
+        # Check the username introduced
+        if not username:
+            flash("Username cannot be empty")
+            return redirect("/register")
+        
+        # Check if the username already exists
+        cursor.execute("SELECT * FROM users WHERE username = ?", (username,))
+        existing_user = cursor.fetchone()
+
+        if existing_user:
+            flash("Username is already taken. Please choose another")
+            return redirect("/register")
+
+        # Check that the username is exclusively made up of letters or/and numbers
+        if not username.isalnum():
+            flash("Username must be made up of letters and/or numbers")
+            return redirect("/register")
+
+        # Check that the user has introduced both passwords
+        if not password or not confirm_password:
+            flash("Password fields cannot be empty")
+            return redirect("/register")
+
+        # Check the lenght of the password
+        if len(password) < 8 or len(confirm_password) < 8:
+            flash("Password should be at least 8 characters long")
+
+        # Check if both passwords match
+        if password != confirm_password:
+            flash("Passwords should match")
+            return redirect("/register")
+
+        # Generate password hash
+        hash = generate_password_hash(password, method="pbkdf2", salt_length=16)
+
+        # Execute the insert of the new user
         cursor.execute("INSERT INTO users (username, total_expenses, hashed_passwords) VALUES (?, ?, ?)", (username, 0, hash))
 
         # Commit changes and close the connection
@@ -62,6 +95,6 @@ def register():
 
         # Flash registered message
 
-        return render_template("login.html")
+        return redirect("/login")
     else:
         return render_template("register.html")
