@@ -21,13 +21,19 @@
         <div class="div-nav-login">
             <nav>
                 <i class="fa-solid fa-square-poll-vertical"></i>
-                <ul>
-                    <li><a href="/login">Log In</a></li>
-                    <li><a href="/register">Register</a></li>
-                </ul>
+                {% if session["username"] %}
+                    <ul>
+                        <li><a href="/logout">Log Out</a></li>
+                    </ul>
+                {% else %}
+                    <ul>
+                        <li><a href="/login">Log In</a></li>
+                        <li><a href="/register">Register</a></li>
+                    </ul>
+                {% endif %}
             </nav>
         </div>
-
+        
         <!-- Display Flashed Messages -->
             {% with messages = get_flashed_messages() %}
                 {% if messages %}

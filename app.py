@@ -139,3 +139,12 @@ def register():
         return redirect("/login")
     else:
         return render_template("register.html")
+
+@app.route('/logout')
+def logout():
+
+    # Clear all session data
+    session.clear()
+
+    flash("You have been logged out")
+    return redirect("/login")
