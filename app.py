@@ -1,10 +1,11 @@
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
+from datetime import timedelta
 import sqlite3
 import os
 
-from helpers import get_db, close_db
+from helpers import get_db, close_db, login_required
 
 # Configure application
 app = Flask(__name__)
@@ -17,13 +18,14 @@ if __name__ == "__main__":
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_FILE_DIR'] = os.path.join(os.getcwd(), 'flask_sessions')
 app.config['SESSION_PERMANENT'] = False
-app.config['SESSION_USE_SIGNED_COOKIE'] = False
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
 Session(app)
 
 # Register the teardown function
 app.teardown_appcontext(close_db)
 
 @app.route('/')
+@login_required
 def index():
     return render_template("index.html")
 
@@ -62,6 +64,7 @@ def login():
 
         # Store user data in session
         session['username'] = username
+
         return redirect("/")
     else:
         return render_template("login.html")
