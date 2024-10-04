@@ -39,6 +39,10 @@ def index():
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
+
+    # Forget any session data
+    session.clear()
+
     if request.method == "POST":
         # Check if the user is registered
         username = request.form.get('username')
@@ -79,6 +83,10 @@ def login():
 
 @app.route('/register', methods=["GET","POST"])
 def register():
+
+    # Forget any session data
+    session.clear()
+    
     if request.method == "POST":
         # Store the data of the user that registers
         username = request.form.get('username')
