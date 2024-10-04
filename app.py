@@ -4,7 +4,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import sqlite3
 import os
 
-# from helpers import apology, login_required, usd
+from helpers import get_db, close_db
 
 # Configure application
 app = Flask(__name__)
@@ -20,9 +20,8 @@ app.config['SESSION_PERMANENT'] = False
 app.config['SESSION_USE_SIGNED_COOKIE'] = False
 Session(app)
 
-# Connect to the SQLite database and create a cursor object
-connect = sqlite3.connect("expenses.db", check_same_thread = False)
-cursor = connect.cursor()
+# Register the teardown function
+app.teardown_appcontext(close_db)
 
 @app.route('/')
 def index():
@@ -48,12 +47,15 @@ def register():
         # Generate password hash
         hash = generate_password_hash(password, method="pbkdf2", salt_length=16)
 
-        # Introduce data in the database
+        # Get the database connection
+        db = get_db()
+
+        # Create a cursor and execute the insert
+        cursor = db.cursor()
         cursor.execute("INSERT INTO users (username, total_expenses, hashed_passwords) VALUES (?, ?, ?)", (username, 0, hash))
 
         # Commit changes and close the connection
-        connect.commit()
-        connect.close()
+        db.commit()
 
         # Store user data in session
         session['username'] = username
