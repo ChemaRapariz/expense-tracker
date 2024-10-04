@@ -18,11 +18,19 @@ if __name__ == "__main__":
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_FILE_DIR'] = os.path.join(os.getcwd(), 'flask_sessions')
 app.config['SESSION_PERMANENT'] = False
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
 Session(app)
 
 # Register the teardown function
 app.teardown_appcontext(close_db)
+
+# Configure headers to prevent caching
+@app.after_request
+def after_request(response):
+    """Ensure responses aren't cached"""
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response.headers["Expires"] = 0
+    response.headers["Pragma"] = "no-cache"
+    return response
 
 @app.route('/')
 @login_required
