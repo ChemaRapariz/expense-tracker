@@ -65,18 +65,34 @@ input {
 }
 
 /* ---- homepage structure ---- */
+main {
+    text-align: center;
+    padding: 3rem;
+}
 .container {
     display: flex;
     width: 90%;
     justify-content: center;
-    align-items: center;
+    margin-right: auto;
+    margin-left: auto;
 }
 .section-table {
     flex-basis: 50%;
 }
 table {
+    margin-top: 20px;
     border-collapse: collapse;
+    width: 100%;
 }
 .section-expenses {
     flex-basis: 50%;
+}
+
+td,th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 12px;
+}
+tr:nth-child(even) {
+    background-color: #dddddd;
 }
