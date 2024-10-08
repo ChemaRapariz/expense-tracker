@@ -11,29 +11,21 @@ Home
             <h2>Transactions</h2>
             <table>
                 <tr>
-                    <th>Type</th>
+                    <th>Category</th>
+                    <th>Note</th>
                     <th>Amount</th>
                     <th>Payment</th>
                     <th>Date</th>
                 </tr>
-                <tr>
-                    <td>Leisure</td>
-                    <td>18.00</td>
-                    <td>Card</td>
-                    <td>18/08</td>
-                </tr>
-                <tr>
-                    <td>Leisure</td>
-                    <td>10.00</td>
-                    <td>Cash</td>
-                    <td>16/08</td>
-                </tr>
-                <tr>
-                    <td>Transportation</td>
-                    <td>8.50</td>
-                    <td>Card</td>
-                    <td>10/08</td>
-                </tr>
+                {% for row in rows %}
+                    <tr>
+                        <td>{{ row.category }}</td>
+                        <td>{{ row.note }}</td>
+                        <td>{{ row.amount }}</td>
+                        <td>{{ row.payment_method }}</td>
+                        <td>{{ row.date }}</td>
+                    </tr>
+                {% endfor %}
             </table>
         </div>
         <div class="section-expenses">

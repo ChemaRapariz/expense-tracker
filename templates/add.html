@@ -15,7 +15,7 @@ Add
         </datalist>
         <input name="note" placeholder="Note" autocomplete="off" type="text" pattern="[A-Za-z0-9 ]+" title="The note must be made up of letters and/or numbers">
         <input name="amount" placeholder="Amount" autocomplete="off" required type="text" pattern="^\d+(\.\d{1,2})?$" title="Enter a valid amount in euros.cents format (e.g., 18.45)">
-        <input name="payment_method" placeholder="Payment Method" list="payment-suggestions" required type="text" pattern="[A-Za-z ]+" title="The payment method must be made up of letters and/or numbers">
+        <input name="payment_method" placeholder="Payment Method" list="payment-suggestions" autocomplete="off" required type="text" pattern="[A-Za-z ]+" title="The payment method must be made up of letters and/or numbers">
         <datalist id="payment-suggestions">
             {% for payment_method in payment_methods %}
                 <option value="{{ payment_method }}">

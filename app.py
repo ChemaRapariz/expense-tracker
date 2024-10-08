@@ -36,7 +36,19 @@ def after_request(response):
 @app.route('/')
 @login_required
 def index():
-    return render_template("index.html")
+
+    # Get the database connection
+    db = get_db()
+
+    # Create a cursor
+    cursor = db.cursor()
+
+    # Obtain the most recent expenses
+    cursor.execute("SELECT category, note, amount, payment_method, date FROM expenses WHERE user_id = ?", (session['user_id'], ))
+
+    rows = cursor.fetchall()
+
+    return render_template("index.html", rows=rows)
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
