@@ -67,7 +67,7 @@ input {
 /* ---- homepage structure ---- */
 main {
     text-align: center;
-    padding: 3rem;
+    padding: 1rem 3rem;
 }
 .container {
     display: flex;

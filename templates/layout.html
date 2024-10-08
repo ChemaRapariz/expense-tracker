@@ -36,15 +36,16 @@
         </div>
         
         <!-- Display Flashed Messages -->
-            {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                <ul class="flashes">
-                    {% for message in messages %}
-                    <li>{{ message }}</li>
-                    {% endfor %}
-                </ul>
-                {% endif %}
-            {% endwith %}
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul class="flashes">
+                {% for message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        {% endwith %}
+    
         <!-- Main block -->
         <main>
             {% block main %}{% endblock %}

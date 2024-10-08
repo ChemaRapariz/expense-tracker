@@ -4,6 +4,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import timedelta
 import sqlite3
 import os
+import re
 
 from helpers import get_db, close_db, login_required
 
@@ -63,6 +64,7 @@ def login():
             return redirect('/login')
         elif current_user:
             username = current_user["username"]
+            user_id = current_user["id"]
             hashed_password = current_user["hashed_passwords"]
         
 
@@ -76,6 +78,7 @@ def login():
 
         # Store user data in session
         session['username'] = username
+        session['user_id'] = user_id
 
         return redirect("/")
     else:
@@ -93,16 +96,20 @@ def register():
         password = request.form.get('password')
         confirm_password = request.form.get('confirm_password')
 
+        # Check the username introduced
+        if not username:
+            flash("Username cannot be empty")
+            return redirect("/register")
+
+        if len(username) > 20:
+            flash("Username is too long")
+            return redirect("/register")
+
         # Get the database connection
         db = get_db()
 
         # Create a cursor
         cursor = db.cursor()
-
-        # Check the username introduced
-        if not username:
-            flash("Username cannot be empty")
-            return redirect("/register")
         
         # Check if the username already exists
         cursor.execute("SELECT * FROM users WHERE username = ?", (username,))
@@ -155,16 +162,102 @@ def logout():
     session.clear()
 
     flash("You have been logged out")
+
     return redirect("/login")
 
 @app.route('/add', methods=["GET", "POST"])
 @login_required
 def add():
+
+    # Get database connection
+    db = get_db()
+
+    # Create a cursor
+    cursor = db.cursor()
+
     if request.method == "POST":
 
+        # Obtain values and store them in variables
+        category = request.form.get('category')
+        note = request.form.get('note')
+        amount = request.form.get('amount')
+        payment_method = request.form.get('payment_method')
+        date = request.form.get('date')
+
+        # Check the 'category' value
+        if not category or not category.replace(" ", "").isalpha():
+            flash("Category must contain only letters and spaces")
+            return redirect("/add")
+
+        if len(category) > 80:
+            flash("Category is too long")
+            return redirect("/add")
+        
+        category = category.strip().capitalize()
+
+        # Check the 'note' value
+        if note:
+            note = note.strip().capitalize()
+            if len(note) > 180:
+                flash("Note is too long")
+                return redirect("/add")
+            if not note.isprintable():
+                flash("Notes must be made up of valid characters")
+                return redirect("/add")
+
+        # Check the 'amount' value
+        # Regular expression to validate the format euros.cents
+        if not amount or not re.match(r"^\d+(\.\d{1,2})?$", amount):
+            flash("Invalid amount format. Please enter a valid amount in euros.cents format (e.g., 18.45).")
+            return redirect("/add")
+        
+        # Check the 'payment_method' value
+        if not payment_method:
+            flash("The payment method must contain letters and/or numbers (e.g., Card).")
+            return redirect("/add")
+
+        payment_method = payment_method.strip().capitalize()
+
+        # Check the 'date' value
+        try:
+            if not date:
+                flash("Date cannot be empty")
+                return redirect("/add")
+        except ValueError:
+            flash("Invalid date format")
+            return redirect("/add")
+        
+        cursor.execute("INSERT INTO expenses (user_id, category, note, amount, payment_method, date) VALUES (?, ?, ?, ?, ?, ?)", (session['user_id'], category, note, amount, payment_method, date))
+
+        # Commit changes and close the connection
+        db.commit()
+        
         # Flash expense added message
         flash("Expense added successfully!")
 
         return redirect("/add")
     else:
-        return render_template("add.html")
+
+        # Single query to get both distinct categories and payment methods
+        cursor.execute("SELECT DISTINCT category, payment_method FROM expenses WHERE user_id = ?", (session['user_id'],))
+
+        # Fetch all rows 
+        rows = cursor.fetchall()
+
+        # Use set to avoid duplicate categories and payment methods
+        categories = set()
+        payment_methods = set()
+
+        # Loop through the rows and add the values to respective sets
+        for row in rows:
+            if row['category']:
+                categories.add(row['category'])
+            if row['payment_method']:
+                payment_methods.add(row['payment_method'])
+        
+        # Convert sets to lists for rendering in the template
+        categories = list(categories)
+        payment_methods = list(payment_methods)
+
+        # Render template and pass the data
+        return render_template("add.html", categories=categories, payment_methods=payment_methods)
