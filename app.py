@@ -156,3 +156,15 @@ def logout():
 
     flash("You have been logged out")
     return redirect("/login")
+
+@app.route('/add', methods=["GET", "POST"])
+@login_required
+def add():
+    if request.method == "POST":
+
+        # Flash expense added message
+        flash("Expense added successfully!")
+
+        return redirect("/add")
+    else:
+        return render_template("add.html")

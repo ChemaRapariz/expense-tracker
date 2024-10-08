@@ -7,6 +7,11 @@ Add
 {% block main %}
     <h1>Add Expenses</h1>
     <form action="/add" method="post">
-        <input required name="">
+        <input required name="type" placeholder="Category" autocomplete="off" type="text" autofocus>
+        <input name="note" placeholder="Note" autocomplete="off" type="text">
+        <input name="amount" placeholder="Amount" autocomplete="off" required type="number">
+        <input name="payment_method" placeholder="Payment Method" autocomplete="off" required type="text">
+        <input name="date" placeholder="Date" autocomplete="off" required type="date">
+        <input type="submit" value="Add">
     </form>
 {% endblock %}

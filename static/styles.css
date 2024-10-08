@@ -77,7 +77,7 @@ main {
     margin-left: auto;
 }
 .section-table {
-    flex-basis: 50%;
+    flex-basis: 60%;
 }
 table {
     margin-top: 20px;
@@ -85,7 +85,7 @@ table {
     width: 100%;
 }
 .section-expenses {
-    flex-basis: 50%;
+    flex-basis: 40%;
 }
 
 td,th {
