@@ -21,7 +21,7 @@
         <div class="div-nav-login">
             <nav>
                 <a href="/" style="text-decoration: none; color: black;"><i class="fa-solid fa-square-poll-vertical"></i></a>
-                {% if session["username"] %}
+                {% if session['username'] %}
                     <ul>
                         <li><a href="/logout">Log Out</a></li>
                         <li><a href="/add">Add</a></li>
@@ -50,5 +50,11 @@
         <main>
             {% block main %}{% endblock %}
         </main>
+        <!-- Footer -->
+        {% if session['username'] %}
+            <footer>
+                <p>You are logged in as {{ session['username'] }}</p>
+            </footer>
+        {% endif %}
     </body>
 </html>

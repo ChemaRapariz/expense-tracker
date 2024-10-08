@@ -44,7 +44,7 @@ def index():
     cursor = db.cursor()
 
     # Obtain the most recent expenses
-    cursor.execute("SELECT category, note, amount, payment_method, date FROM expenses WHERE user_id = ?", (session['user_id'], ))
+    cursor.execute("SELECT category, note, amount, payment_method, date FROM expenses WHERE user_id = ? LIMIT 6", (session['user_id'], ))
 
     rows = cursor.fetchall()
 
