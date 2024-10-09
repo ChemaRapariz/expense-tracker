@@ -6,7 +6,7 @@ Register
 
 {% block main %}
 <h1>Register</h1>
-<form action="/register" method="post">
+<form class="form-v1" action="/register" method="post">
     <input required name="username" autocomplete="off" autofocus placeholder="Name" type="text" pattern="[A-Za-z0-9]+" title="Username must be made up of letters and/or numbers">
     <input required name="password" type="password" placeholder="Password" minlength="8">
     <input required name="confirm_password" type="password" placeholder="Repeat Password" minlength="8">

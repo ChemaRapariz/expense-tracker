@@ -6,7 +6,7 @@ Add
 
 {% block main %}
     <h1>Add Expenses</h1>
-    <form action="/add" method="post">
+    <form class="form-v1" action="/add" method="post">
         <input name="category" placeholder="Category" list="category-suggestions" type="text" required autofocus autocomplete="off" pattern="[A-Za-z ]+" title="The category must be made up of letters only">
         <datalist id="category-suggestions">
             {% for category in categories %}
