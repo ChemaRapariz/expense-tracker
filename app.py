@@ -230,9 +230,10 @@ def add():
 
         payment_method = payment_method.strip().capitalize()
 
-        # Check the 'date' value. Validate date format (dd/mm/yyyy)
-        if not date or not re.match(r"^\d{2}/\d{2}/\d{4}$", date):
-            flash("Invalid date format. Please enter a valid date: dd/mm/yyyy")
+        # Check the 'date' value. Validate date format (yyyy-mm-dd)
+        if not date or not re.match(r"^\d{4}-\d{2}-\d{2}$", date):
+            print(date)
+            flash("Invalid date format. Please enter a valid date")
             return redirect("/add")        
 
         cursor.execute("INSERT INTO expenses (user_id, category, note, amount, payment_method, date) VALUES (?, ?, ?, ?, ?, ?)", (session['user_id'], category, note, amount, payment_method, date))
@@ -281,7 +282,38 @@ def history():
     cursor = db.cursor()
 
     if request.method == "POST":
-        return redirect("/history")
+
+        # Store the filter choices of the user
+        option = request.form.get("filter")
+        limit = request.form.get("limit")
+
+        # Sanitize and validate 'option' variable
+        valid_options = {"date": "date", "category": "category", "amount": "amount", "payment": "payment_method"}
+        if not option or option not in valid_options:
+            flash("Please select a valid filter option")
+            return redirect("/history")
+
+        # Use the sanitzed column name for the ORDER BY cluase
+        order_by_column = valid_options[option]
+
+        # Sanitze and validate 'limit' variable
+        if not limit or limit not in ["5", "10", "20", "50", "100", "All"]:
+            flash("Please select one of the avialable limits")
+            return redirect("/history")
+
+        # Build the SQL query with the order and limit
+        query = f"SELECT category, note, amount, payment_method, date FROM expenses WHERE user_id = ? ORDER BY {order_by_column}"
+        params = [session['user_id']]
+
+        if limit != "All":
+            query += " LIMIT ?"
+            params.append(int(limit))
+
+        # Execute the query
+        cursor.execute(query, params)
+        rows = cursor.fetchall()
+
+        return render_template("history.html", rows=rows)
 
 
     # Get data from the user
