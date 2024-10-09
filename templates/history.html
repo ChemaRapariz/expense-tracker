@@ -7,6 +7,26 @@ History
 {% block main %}
 <h1>History</h1>
 <div class="container">
+    <form class="form-v2" action="/history" method="post">
+        <select class="filter" name="filter">
+            <option value="" disabled selected>Filter by</option>
+            <option value="date">Date</option>
+            <option value="category">Category</option>
+            <option value="amount">Amount</option>
+            <option value="payment_method">Payment</option>
+        </select>
+        <select class="filter" name="limit">
+            <option value="5">5</option>
+            <option value="5">10</option>
+            <option value="5">20</option>
+            <option value="5">50</option>
+            <option value="5">100</option>
+            <option value="All">All</option>
+        </select>
+        <input class="filter" type="submit" value="Filter">
+    </form>
+</div>
+<div class="container">
     <table>
         <tr>
             <th>Category</th>

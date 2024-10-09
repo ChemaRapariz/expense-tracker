@@ -271,6 +271,7 @@ def add():
         return render_template("add.html", categories=categories, payment_methods=payment_methods)
 
 @app.route('/history', methods = ["GET", "POST"])
+@login_required
 def history():
 
     # Get database connection
@@ -284,7 +285,7 @@ def history():
 
 
     # Get data from the user
-    cursor.execute("SELECT category, note, amount, payment_method, date FROM expenses WHERE user_id = ?", (session['user_id'], ))
+    cursor.execute("SELECT category, note, amount, payment_method, date FROM expenses WHERE user_id = ? ORDER BY date DESC", (session['user_id'], ))
 
     # Fetch data 
     rows = cursor.fetchall()
