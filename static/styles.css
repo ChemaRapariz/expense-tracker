@@ -27,12 +27,13 @@ h1 {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 40px;
+    padding: 20px 30px;
 }
 
 .div-nav-login nav ul{
     list-style-type: none;
     display: flex;
+    align-items: center;
 }
 
 .div-nav-login nav ul a{
@@ -104,3 +105,5 @@ footer {
     margin-top: 15px;
     color: #6f7375;
 }
+
+/* ---- Filter ---- */
