@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block title %}
+History
+{% endblock %}
+
+{% block main %}
+<h1>History</h1>
+<div class="container">
+    <table>
+        <tr>
+            <th>Category</th>
+            <th>Note</th>
+            <th>Amount</th>
+            <th>Payment</th>
+            <th>Date</th>
+        </tr>
+        {% for row in rows %}
+        <tr>
+            <td>{{ row.category }}</td>
+            <td>{{ row.note }}</td>
+            <td>{{ row.amount }}</td>
+            <td>{{ row.payment_method }}</td>
+            <td>{{ row.date }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock%}

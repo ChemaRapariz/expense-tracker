@@ -44,7 +44,7 @@ def index():
     cursor = db.cursor()
 
     # Obtain the most recent expenses
-    cursor.execute("SELECT category, note, amount, payment_method, date FROM expenses WHERE user_id = ? LIMIT 6", (session['user_id'], ))
+    cursor.execute("SELECT category, note, amount, payment_method, date FROM expenses WHERE user_id = ? ORDER BY date DESC LIMIT 6", (session['user_id'], ))
 
     rows = cursor.fetchall()
 
@@ -230,15 +230,11 @@ def add():
 
         payment_method = payment_method.strip().capitalize()
 
-        # Check the 'date' value
-        try:
-            if not date:
-                flash("Date cannot be empty")
-                return redirect("/add")
-        except ValueError:
-            flash("Invalid date format")
-            return redirect("/add")
-        
+        # Check the 'date' value. Validate date format (dd/mm/yyyy)
+        if not date or not re.match(r"^\d{2}/\d{2}/\d{4}$", date):
+            flash("Invalid date format. Please enter a valid date: dd/mm/yyyy")
+            return redirect("/add")        
+
         cursor.execute("INSERT INTO expenses (user_id, category, note, amount, payment_method, date) VALUES (?, ?, ?, ?, ?, ?)", (session['user_id'], category, note, amount, payment_method, date))
 
         # Commit changes and close the connection
@@ -273,3 +269,24 @@ def add():
 
         # Render template and pass the data
         return render_template("add.html", categories=categories, payment_methods=payment_methods)
+
+@app.route('/history', methods = ["GET", "POST"])
+def history():
+
+    # Get database connection
+    db = get_db()
+
+    # Create a cursor
+    cursor = db.cursor()
+
+    if request.method == "POST":
+        return redirect("/history")
+
+
+    # Get data from the user
+    cursor.execute("SELECT category, note, amount, payment_method, date FROM expenses WHERE user_id = ?", (session['user_id'], ))
+
+    # Fetch data 
+    rows = cursor.fetchall()
+
+    return render_template("history.html", rows=rows)
