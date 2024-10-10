@@ -53,8 +53,15 @@ def index():
 @app.route('/login', methods=["GET", "POST"])
 def login():
 
-    # Forget any session data
+    # Temporaly save the flashed messages
+    flashed_messages = session.get('_flashes', [])
+
+    # Clear all session data
     session.clear()
+
+    # Re-flash the previously saved messages
+    for category, message in flashed_messages:
+        flash(message)
 
     if request.method == "POST":
         # Check if the user is registered
@@ -83,7 +90,7 @@ def login():
         # Check if the password send through the form is correct
         if not check_password_hash(hashed_password, password):
             flash("Incorrect password")
-            return redirect('/login')
+            return redirect("/login")
     
         # Flash message, login completed  
         flash("Logged In Correctly")
@@ -91,7 +98,7 @@ def login():
         # Store user data in session
         session['username'] = username
         session['user_id'] = user_id
-
+        
         return redirect("/")
     else:
         return render_template("login.html")
@@ -99,8 +106,15 @@ def login():
 @app.route('/register', methods=["GET","POST"])
 def register():
 
-    # Forget any session data
+    # Temporaly save the flashed messages
+    flashed_messages = session.get('_flashes', [])
+
+    # Clear all session data
     session.clear()
+
+    # Re-flash the previously saved messages
+    for category, message in flashed_messages:
+        flash(message)
     
     if request.method == "POST":
         # Store the data of the user that registers
@@ -351,6 +365,7 @@ def history():
         cursor.execute(query, params)
         rows = cursor.fetchall()
 
+        flash(f"Ordered by {order_by_column.upper()} in {order}ENDING order {limit} entries")
         return render_template("history.html", rows=rows, categories=distinct_categories)
 
 
@@ -360,4 +375,5 @@ def history():
     # Fetch data 
     rows = cursor.fetchall()
 
+    flash("Ordered by DATE in DESCENDING order 5 entries")
     return render_template("history.html", rows=rows, categories=distinct_categories)
