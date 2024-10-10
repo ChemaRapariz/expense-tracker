@@ -232,7 +232,6 @@ def add():
 
         # Check the 'date' value. Validate date format (yyyy-mm-dd)
         if not date or not re.match(r"^\d{4}-\d{2}-\d{2}$", date):
-            print(date)
             flash("Invalid date format. Please enter a valid date")
             return redirect("/add")        
 
@@ -286,6 +285,7 @@ def history():
         # Store the filter choices of the user
         option = request.form.get("filter")
         limit = request.form.get("limit")
+        order = request.form.get("order")
 
         # Sanitize and validate 'option' variable
         valid_options = {"date": "date", "category": "category", "amount": "amount", "payment": "payment_method"}
@@ -301,8 +301,14 @@ def history():
             flash("Please select one of the avialable limits")
             return redirect("/history")
 
+        # Saniteze and validate 'order' variable
+        if not order or order not in ["DESC", "ASC"]:
+            flash("Please selecte a valid order")
+            return redirect("/history")
+
+
         # Build the SQL query with the order and limit
-        query = f"SELECT category, note, amount, payment_method, date FROM expenses WHERE user_id = ? ORDER BY {order_by_column}"
+        query = f"SELECT category, note, amount, payment_method, date FROM expenses WHERE user_id = ? ORDER BY {order_by_column} {order}"
         params = [session['user_id']]
 
         if limit != "All":
@@ -317,7 +323,7 @@ def history():
 
 
     # Get data from the user
-    cursor.execute("SELECT category, note, amount, payment_method, date FROM expenses WHERE user_id = ? ORDER BY date DESC", (session['user_id'], ))
+    cursor.execute("SELECT category, note, amount, payment_method, date FROM expenses WHERE user_id = ? ORDER BY date DESC LIMIT 5", (session['user_id'], ))
 
     # Fetch data 
     rows = cursor.fetchall()
