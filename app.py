@@ -280,12 +280,18 @@ def history():
     # Create a cursor
     cursor = db.cursor()
 
+    # Get distinct categories for the dropdown filter
+    category_query = "SELECT DISTINCT category FROM expenses WHERE user_id = ?"
+    cursor.execute(category_query, (session['user_id'],))
+    distinct_categories = cursor.fetchall()
+
     if request.method == "POST":
 
         # Store the filter choices of the user
         option = request.form.get("filter")
         limit = request.form.get("limit")
         order = request.form.get("order")
+        categories = request.form.get("categories")
 
         # Sanitize and validate 'option' variable
         valid_options = {"date": "date", "category": "category", "amount": "amount", "payment": "payment_method"}
@@ -296,7 +302,7 @@ def history():
         # Use the sanitzed column name for the ORDER BY cluase
         order_by_column = valid_options[option]
 
-        # Sanitze and validate 'limit' variable
+        # Sanitize and validate 'limit' variable
         if not limit or limit not in ["5", "10", "20", "50", "100", "All"]:
             flash("Please select one of the avialable limits")
             return redirect("/history")
@@ -308,9 +314,18 @@ def history():
 
 
         # Build the SQL query with the order and limit
-        query = f"SELECT category, note, amount, payment_method, date FROM expenses WHERE user_id = ? ORDER BY {order_by_column} {order}"
+        query = "SELECT category, note, amount, payment_method, date FROM expenses WHERE user_id = ?"
         params = [session['user_id']]
 
+        # If a category filter is provided, added it to the query
+        if categories:
+            query += " AND category = ?"
+            params.append(categories)
+
+        # Add sorting (order by column and ASC/DESC)
+        query += f"ORDER BY {order_by_column}, date {order}"
+
+        # Add limit to the query if it is not "All"
         if limit != "All":
             query += " LIMIT ?"
             params.append(int(limit))
@@ -319,7 +334,7 @@ def history():
         cursor.execute(query, params)
         rows = cursor.fetchall()
 
-        return render_template("history.html", rows=rows)
+        return render_template("history.html", rows=rows, categories=distinct_categories)
 
 
     # Get data from the user
@@ -328,4 +343,4 @@ def history():
     # Fetch data 
     rows = cursor.fetchall()
 
-    return render_template("history.html", rows=rows)
+    return render_template("history.html", rows=rows, categories=distinct_categories)

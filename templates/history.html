@@ -9,13 +9,13 @@ History
 <div class="container">
     <form class="form-v2" action="/history" method="post">
         <select class="filter" name="filter">
-            <option value="" disabled selected>Filter by</option>
+            <option value="" disabled selected>Sort by</option>
             <option value="date">Date</option>
             <option value="category">Category</option>
             <option value="amount">Amount</option>
             <option value="payment">Payment</option>
         </select>
-        <select class="filter" name="limit">
+        <select class="filter" name="limit" style="width: 55px;">
             <option value="5">5</option>
             <option value="10">10</option>
             <option value="20">20</option>
@@ -24,8 +24,14 @@ History
             <option value="All">All</option>
         </select>
         <select class="filter" name="order">
-            <option value="DESC">DESC</option>
-            <option value="ASC">ASC</option>
+            <option value="DESC">Descending</option>
+            <option value="ASC">Ascending</option>
+        </select>
+        <select id="categories" class="filter" name="categories" style="display: block;">
+            <option value="" disabled selected>Category</option>
+            {% for category in categories %}
+            <option value="{{ category.category }}">{{ category.category }}</option>
+            {% endfor %}
         </select>
         <input class="filter" type="submit" value="Filter">
     </form>
@@ -50,4 +56,7 @@ History
         {% endfor %}
     </table>
 </div>
+<script>
+
+</script>
 {% endblock%}
