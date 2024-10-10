@@ -292,30 +292,46 @@ def history():
         limit = request.form.get("limit")
         order = request.form.get("order")
         categories = request.form.get("categories")
+        date = request.form.get("date")
 
-        # Sanitize and validate 'option' variable
+        # Sanitize and validate inputs
         valid_options = {"date": "date", "category": "category", "amount": "amount", "payment": "payment_method"}
-        if not option or option not in valid_options:
-            flash("Please select a valid filter option")
-            return redirect("/history")
+        valid_limits = ["5", "10", "20", "50", "100", "All"]
+        valid_order = ["ASC", "DESC"]
 
-        # Use the sanitzed column name for the ORDER BY cluase
-        order_by_column = valid_options[option]
+        # Validate 'option' variable
+        if option:
+            if option not in valid_options:
+                flash("Please select a valid filter option")
+                return redirect("/history")
+            else:
+                # Use the sanitized column name for the ORDER BY cluase
+                order_by_column = valid_options[option]
+        elif not option:
+            order_by_column = "date"
+
 
         # Sanitize and validate 'limit' variable
-        if not limit or limit not in ["5", "10", "20", "50", "100", "All"]:
+        if not limit or limit not in valid_limits:
             flash("Please select one of the avialable limits")
             return redirect("/history")
 
-        # Saniteze and validate 'order' variable
-        if not order or order not in ["DESC", "ASC"]:
+        # Sanitize and validate 'order' variable
+        if not order or order not in valid_order:
             flash("Please selecte a valid order")
             return redirect("/history")
 
-
         # Build the SQL query with the order and limit
-        query = "SELECT category, note, amount, payment_method, date FROM expenses WHERE user_id = ?"
+        query = "SELECT category, note, amount, payment_method, date FROM expenses WHERE user_id = ? "
         params = [session['user_id']]
+
+        # If a date filter is provided, validate it and added it to the query
+        if date:
+            if not re.match(r"^\d{4}-\d{2}-\d{2}$", date):
+                flash("Invalid date format. Please enter a valid date")
+                return redirect("/add") 
+            query += " AND date = ?"
+            params.append(date)
 
         # If a category filter is provided, added it to the query
         if categories:
@@ -323,7 +339,8 @@ def history():
             params.append(categories)
 
         # Add sorting (order by column and ASC/DESC)
-        query += f"ORDER BY {order_by_column}, date {order}"
+        query += f"ORDER BY {order_by_column} {order}"
+        
 
         # Add limit to the query if it is not "All"
         if limit != "All":
