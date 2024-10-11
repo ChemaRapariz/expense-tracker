@@ -1,7 +1,8 @@
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
-from datetime import timedelta
+from datetime import timedelta, datetime
+import calendar
 import sqlite3
 import os
 import re
@@ -43,12 +44,54 @@ def index():
     # Create a cursor
     cursor = db.cursor()
 
-    # Obtain the most recent expenses
-    cursor.execute("SELECT category, note, amount, payment_method, date FROM expenses WHERE user_id = ? ORDER BY date DESC LIMIT 6", (session['user_id'], ))
+    # Get the current year and month
+    current_year = datetime.now().year
+    current_month = datetime.now().month
 
+    # Calculate the first and last days of the month
+    first_day_of_month = f'{current_year}-{current_month:02d}-01'
+    if current_month == 12:
+        next_month_first_day = f'{current_year + 1}-01-01'
+    else:
+        next_month_first_day = f'{current_year}-{current_month + 1:02d}-01'
+    
+    # SQL query to get the 6 most recent expenses for the current month and year
+    query = """
+    SELECT category, note, amount, payment_method, date FROM expenses
+    WHERE user_id = ?
+    AND date >= ?
+    AND date < ?
+    ORDER BY date DESC
+    LIMIT 6
+    """
+
+    # Execute the query 
+    cursor.execute(query, (session['user_id'], first_day_of_month, next_month_first_day))
     rows = cursor.fetchall()
 
-    return render_template("index.html", rows=rows)
+    # Query to calculate total expenses of the user this month
+    total_expenses_query = """
+    SELECT SUM(amount) as total_expenses
+    FROM expenses
+    WHERE user_id = ?
+    AND date >= ?
+    AND date < ?
+    """
+
+    cursor.execute(total_expenses_query, (session['user_id'], first_day_of_month, next_month_first_day))
+    result = cursor.fetchone()
+
+    # Get total expenses, defaulting to 0 if there are no expenses
+    total_expenses = result['total_expenses'] if result['total_expenses'] is not None else 0
+
+    # Get the number of days in the current month
+    days_in_month = calendar.monthrange(current_year, current_month)[1]
+
+    # Calculate the daily average expense
+    daily_expenses = round(total_expenses / days_in_month, 2) if days_in_month > 0 else 0
+ 
+
+    return render_template("index.html", rows=rows, total_expenses=total_expenses, daily_expenses=daily_expenses)
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
