@@ -61,7 +61,7 @@ def index():
     WHERE user_id = ?
     AND date >= ?
     AND date < ?
-    ORDER BY date DESC
+    ORDER BY date DESC, created_at DESC
     LIMIT 6
     """
 
@@ -396,7 +396,7 @@ def history():
             params.append(categories)
 
         # Add sorting (order by column and ASC/DESC)
-        query += f"ORDER BY {order_by_column} {order}"
+        query += f"ORDER BY {order_by_column} {order}, created_at {order}"
         
 
         # Add limit to the query if it is not "All"
