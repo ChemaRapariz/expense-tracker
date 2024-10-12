@@ -8,7 +8,7 @@ History
 <h1>History</h1>
 <div class="container">
     <form class="form-v2" action="/history" method="post">
-        <select class="filter" name="filter">
+        <select id="dropdown-filter" class="filter" name="filter">
             <option value="" disabled selected>Sort by</option>
             <option value="date">Date</option>
             <option value="category">Category</option>
@@ -33,7 +33,7 @@ History
             <option value="{{ category.category }}">{{ category.category }}</option>
             {% endfor %}
         </select>
-        <input class="filter" type="date" name="date" autocomplete="off">
+        <input id="dropdown-date" class="filter" type="date" name="date" autocomplete="off" style="display: block;">
         <input class="filter" type="submit" value="Filter">
     </form>
 </div>
@@ -71,6 +71,20 @@ History
     </table>
 </div>
 <script>
+    // Get the filter and date dropdowns
+    const filterDropdown = document.getElementById('dropdown-filter');
+    const dateDropdown = document.getElementById('dropdown-date');
 
+    // Add an event listener to detect when the filter dropdown changes
+    filterDropdown.addEventListener('change', function() {
+        // Hide the date dropdown if 'Date' is selected
+        if (filterDropdown.value === 'date') {
+            dateDropdown.style.display = 'none';
+        } else {
+            // Show the date dropdown if any other option is selected
+            dateDropdown.style.display = 'block';
+            dateDropdown.selectedIndex = 0;
+        }
+    });
 </script>
 {% endblock%}
