@@ -7,15 +7,19 @@ Add
 {% block main %}
     <h1>Add Expenses</h1>
     <form class="form-v1" action="/add" method="post">
-        <input name="category" placeholder="Category" list="category-suggestions" type="text" required autofocus autocomplete="off" pattern="[A-Za-z ]+" title="The category must be made up of letters only">
-        <datalist id="category-suggestions">
-            {% for category in categories %}
-                <option value="{{ category }}">
-            {% endfor %}
-        </datalist>
+        <div style="position: relative;">
+            <input name="category" placeholder="Category" list="category-suggestions" type="text" required autofocus autocomplete="off" pattern="[A-Za-z ]+" title="The category must be made up of letters only">
+            <datalist id="category-suggestions">
+                {% for category in categories %}
+                    <option value="{{ category }}">
+                {% endfor %}
+            </datalist>
+            <i id="tooltip-icon" class="fa-solid fa-circle-info"></i>
+            <div id="tooltip-text">(e.g., Leisure, Transportation...)<br><br>We will display your categories as suggestions<br><br>If you want to delete a category from your profile you must delete all expenses with that category</div>
+        </div>
         <input name="note" placeholder="Note" autocomplete="off" type="text" pattern="[A-Za-z0-9 ]+" title="The note must be made up of letters and/or numbers">
-        <input name="amount" placeholder="Amount" autocomplete="off" required type="text" pattern="^\d+(\.\d{1,2})?$" title="Enter a valid amount in euros.cents format (e.g., 18.45)">
-        <input name="payment_method" placeholder="Payment Method" list="payment-suggestions" autocomplete="off" required type="text" pattern="[A-Za-z ]+" title="The payment method must be made up of letters and/or numbers">
+        <input name="amount" placeholder="Amount (e.g., 18.45)" autocomplete="off" required type="text" pattern="^\d+(\.\d{1,2})?$" title="Enter a valid amount in euros.cents format (e.g., 18.45)">
+        <input name="payment_method" placeholder="Payment Method (e.g., Card)" list="payment-suggestions" autocomplete="off" required type="text" pattern="[A-Za-z ]+" title="The payment method must be made up of letters and/or numbers">
         <datalist id="payment-suggestions">
             {% for payment_method in payment_methods %}
                 <option value="{{ payment_method }}">
