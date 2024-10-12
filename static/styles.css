@@ -17,6 +17,12 @@ h1 {
     margin-bottom: 30px;
 }
 
+span {
+    font-family: Arial, sans-serif;
+    font-style: oblique;
+    font-weight: bold;
+    font-size: 17px;
+}
 /* ------ navigation bar ----- */
 .div-nav-login {
     background-color: #E8E8E8;

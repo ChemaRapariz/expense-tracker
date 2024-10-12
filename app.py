@@ -1,4 +1,4 @@
-from flask import Flask, flash, redirect, render_template, request, session
+from flask import Flask, flash, redirect, render_template, request, session 
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import timedelta, datetime
@@ -408,7 +408,11 @@ def history():
         cursor.execute(query, params)
         rows = cursor.fetchall()
 
-        flash(f"Ordered by {order_by_column.upper()} in {order}ENDING order {limit} entries")
+        flash(f"Ordered by <span>{order_by_column.upper()}</span> in <span>{order}ENDING</span> order <span>{limit}</span> entries")
+        if categories:
+            flash(f"Category: <span>{categories.upper()}</span>")
+        if date:
+            flash(f"Date: <span>{date}</span>")
         return render_template("history.html", rows=rows, categories=distinct_categories)
 
 
@@ -418,7 +422,7 @@ def history():
     # Fetch data 
     rows = cursor.fetchall()
 
-    flash("Ordered by DATE in DESCENDING order 5 entries")
+    flash(f"Ordered by <span>DATE</span> in <span>DESCENDING</span> order <span>5</span> entries")
     return render_template("history.html", rows=rows, categories=distinct_categories)
 
 @app.route('/delete/<int:transaction_id>', methods = ["POST", "GET"])
