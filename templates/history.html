@@ -46,22 +46,28 @@ History
             <th>Payment</th>
             <th>Date (yyyy-mm-dd)</th>
         </tr>
-        {% for row in rows %}
-        <tr>
-            <td>{{ row.category }}</td>
-            <td>{{ row.note }}</td>
-            <td>{{ row.amount }}</td>
-            <td>{{ row.payment_method }}</td>
-            <td>{{ row.date }}</td>
-            <td style="text-align: center;">
-                <form action="/delete/{{ row.transaction_id }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this expense?');">
-                    <button type="submit" style="background: none; border: none;">
-                        <i class="fa-solid fa-trash" style="text-decoration: none; color: black;"></i>
-                    </button>
-                </form>
-            </td>
-        </tr>
-        {% endfor %}
+        {% if rows %}
+            {% for row in rows %}
+            <tr>
+                <td>{{ row.category }}</td>
+                <td>{{ row.note }}</td>
+                <td>{{ row.amount }}</td>
+                <td>{{ row.payment_method }}</td>
+                <td>{{ row.date }}</td>
+                <td style="text-align: center;">
+                    <form action="/delete/{{ row.transaction_id }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this expense?');">
+                        <button type="submit" style="background: none; border: none;">
+                            <i class="fa-solid fa-trash" style="text-decoration: none; color: black;"></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="5"><p style="font-style: italic;">No entries found</p></td>
+            </tr>
+        {% endif %}
     </table>
 </div>
 <script>

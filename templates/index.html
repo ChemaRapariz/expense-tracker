@@ -17,15 +17,21 @@ Home
                     <th>Payment</th>
                     <th>Date</th>
                 </tr>
-                {% for row in rows %}
+                {% if rows %}
+                    {% for row in rows %}
+                        <tr>
+                            <td>{{ row.category }}</td>
+                            <td>{{ row.note }}</td>
+                            <td>{{ row.amount }}</td>
+                            <td>{{ row.payment_method }}</td>
+                            <td>{{ row.date }}</td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
                     <tr>
-                        <td>{{ row.category }}</td>
-                        <td>{{ row.note }}</td>
-                        <td>{{ row.amount }}</td>
-                        <td>{{ row.payment_method }}</td>
-                        <td>{{ row.date }}</td>
+                        <td colspan="5"><p style="font-style: italic;">No expenses recorded yet</p></td>
                     </tr>
-                {% endfor %}
+                {% endif %}
             </table>
         </div>
         <div class="section-expenses">
