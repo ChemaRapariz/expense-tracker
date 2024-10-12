@@ -379,7 +379,7 @@ def history():
             return redirect("/history")
 
         # Build the SQL query with the order and limit
-        query = "SELECT category, note, amount, payment_method, date FROM expenses WHERE user_id = ? "
+        query = "SELECT transaction_id, category, note, amount, payment_method, date FROM expenses WHERE user_id = ? "
         params = [session['user_id']]
 
         # If a date filter is provided, validate it and added it to the query
@@ -413,10 +413,41 @@ def history():
 
 
     # Get data from the user
-    cursor.execute("SELECT category, note, amount, payment_method, date FROM expenses WHERE user_id = ? ORDER BY date DESC LIMIT 5", (session['user_id'], ))
+    cursor.execute("SELECT transaction_id, category, note, amount, payment_method, date FROM expenses WHERE user_id = ? ORDER BY date DESC, created_at DESC LIMIT 5", (session['user_id'], ))
 
     # Fetch data 
     rows = cursor.fetchall()
 
     flash("Ordered by DATE in DESCENDING order 5 entries")
     return render_template("history.html", rows=rows, categories=distinct_categories)
+
+@app.route('/delete/<int:transaction_id>', methods = ["POST", "GET"])
+@login_required
+def delete(transaction_id):
+    
+    # Only process if the method is POST
+    if request.method == "POST":
+        # Get database connection
+        db = get_db()
+        cursor = db.cursor()
+
+        # Verify if the expense exists and belongs to the current user
+        cursor.execute("SELECT * FROM expenses WHERE user_id = ? AND transaction_id = ?", (session['user_id'], transaction_id))
+        result = cursor.fetchone()
+
+        # If the expense is found delte it from the table
+        if result:
+            cursor.execute("DELETE FROM expenses WHERE user_id = ? AND transaction_id = ?", (session['user_id'], transaction_id))
+
+            # Commit the change
+            db.commit()
+
+            flash("Expense deleted successfully!")
+        else:
+
+            # If the expense is not found, tell the user
+            flash("Expense not found")
+    
+    return redirect("/history")
+
+
