@@ -21,13 +21,13 @@ Summary
 </div>
 <div class="summary-container-option">
     <select id="dropdown-chart" class="filter" name="chart">
-        <option value="pie">Pie Chart</option>
         <option value="bar">Bar Chart</option>
+        <option value="pie">Pie Chart</option>
     </select>
 </div>
 <div class="summary-container-graphs">
-    <canvas id="pieChart" style="display: block; width: 100%; max-width: 1200px;"></canvas>
-    <canvas id="barChart" style="display: none; width: 100%; max-width: 900px;"></canvas>
+    <canvas id="pieChart" style="display: none; width: 100%; max-width: 1200px;"></canvas>
+    <canvas id="barChart" style="display: block; width: 100%; max-width: 900px;"></canvas>
 </div>
 <div class="summary-container-expenses">
 
@@ -103,15 +103,15 @@ Summary
 
     // Add an event listener to detect when the chart dropdown filter changes
     chartDropdown.addEventListener('change', function() {
-        // Show the Pie Chart and hide the Bar Chart if the pie option is selected (default)
-        if (chartDropdown.value === "pie") {
+        // Show the Bar Chart and hide the Pie Chart if the bar option is selected (default)
+        if (chartDropdown.value === "bar") {
+            document.getElementById('barChart').style.display = "block"
+            document.getElementById('pieChart').style.display = "none"
+        }
+        // Show the Pie Chart and hide the Bar Chart if the pie option is selected
+        else if (chartDropdown.value === "pie") {
             document.getElementById('pieChart').style.display = "block"
             document.getElementById('barChart').style.display = "none"
-        }
-        // Show the Bar Chart and hide the Pie Chart if the bar option is selected
-        else if (chartDropdown.value === "bar") {
-            document.getElementById('pieChart').style.display = "none"
-            document.getElementById('barChart').style.display = "block"
         }
     });
 
