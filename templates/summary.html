@@ -30,10 +30,7 @@ Summary
 <script>
     const expenses = {{ expenses | tojson }};
 
-    console.log(expenses)
-    console.log(typeof(expenses))
-
-    
+    // Colors used for the pie chart 
     var barColors = [
         "#b91d47",
         "#00aba9",
@@ -42,16 +39,14 @@ Summary
         "#1e7145"
         ];
 
+    // Create arrays containing the categories and expenses of the user that month
     const categories = expenses.map(e => e[0]);
     const totals = expenses.map(e => e[1]);
-
-    console.log(categories)
-    console.log(totals)
 
     // Create the pie chart
     const ctxPie = document.getElementById('pieChart').getContext('2d');
     const pieChart = new Chart(ctxPie, {
-        type: 'pie',
+        type: "pie",
         data: {
             labels: categories,
             datasets: [{
@@ -69,6 +64,29 @@ Summary
                 legend: {
                     position: 'top',
                 },
+            }
+        }
+    });
+
+    // Create the bar chart
+    const ctxBar = document.getElementById('barChart').getContext('2d');
+    const barChart = new Chart(ctxBar, {
+        type: "bar",
+        data: {
+            labels: categories,
+            datasets: [{
+                label: "Total Expenses",
+                data: totals,
+                backgroundColor: ["#36a2eb"],
+                borderColor: ["#36a2eb"],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
             }
         }
     });
