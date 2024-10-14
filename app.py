@@ -111,6 +111,9 @@ def login():
         username = request.form.get('username')
         password = request.form.get('password')
 
+        # Remove spaces at the beginning and at the end of the username string
+        username = username.strip()
+
         # Get the database connection
         db = get_db()
 
@@ -454,4 +457,10 @@ def delete(transaction_id):
     
     return redirect("/history")
 
+@app.route('/summary', methods = ["GET", "POST"])
+@login_required
+def summary():
+    if request.method == "POST":
+        return redirect("/summary")
+    return render_template("summary.html")
 

@@ -7,7 +7,7 @@ Log In
 {% block main %}
 <h1>Log In</h1>
 <form class="form-v1" method="post" action="/login">
-    <input required name="username" placeholder="Name" autofocus autocomplete="off" type="text" pattern="[A-Za-z0-9]+" title="Username must be made up of letters and/or numbers">
+    <input required name="username" placeholder="Name" autofocus autocomplete="off" type="text" pattern="[A-Za-z0-9 ]+" title="Username must be made up of letters and/or numbers">
     <input required name="password" placeholder="Password" type="password" minlength="8">
     <input type="submit" value="Submit">
 </form>

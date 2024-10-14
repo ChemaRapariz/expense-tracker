@@ -14,6 +14,9 @@
         <!-- Icons on the html code -->
         <script src="https://kit.fontawesome.com/2a36fe9429.js" crossorigin="anonymous"></script>
 
+        <!-- Add Chart.js via CDN -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
         <title>Expense Tracker: {% block title %}{% endblock %}</title>
     </head>
     <body>
@@ -25,6 +28,7 @@
                     {% if session.get('username') %}
                     <li><a href="/add">Add</a></li>
                     <li><a href="/history">History</a></li>
+                    <li><a href="/summary">Summary</a></li>
                     {% endif %}
                 </ul>
                 <ul>
