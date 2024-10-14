@@ -202,3 +202,21 @@ footer {
 }
 
 /* ---- Summary ---- */
+
+.summary-container-option {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.summary-container-graphs {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    flex-direction: column;
+}
+
+canvas {
+    margin-top: 20px;
+}
+

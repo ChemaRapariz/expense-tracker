@@ -19,9 +19,15 @@ Summary
         </select>
     </form>
 </div>
+<div class="summary-container-option">
+    <select id="dropdown-chart" class="filter" name="chart">
+        <option value="pie">Pie Chart</option>
+        <option value="bar">Bar Chart</option>
+    </select>
+</div>
 <div class="summary-container-graphs">
-    <canvas id="pieChart"></canvas>
-    <canvas id="barChart"></canvas>
+    <canvas id="pieChart" style="display: block; width: 100%; max-width: 1200px;"></canvas>
+    <canvas id="barChart" style="display: none; width: 100%; max-width: 900px;"></canvas>
 </div>
 <div class="summary-container-expenses">
 
@@ -75,14 +81,14 @@ Summary
         data: {
             labels: categories,
             datasets: [{
-                label: "Total Expenses",
                 data: totals,
-                backgroundColor: ["#36a2eb"],
+                backgroundColor: barColors,
                 borderColor: ["#36a2eb"],
                 borderWidth: 1
             }]
         },
         options: {
+            legend: {display: false},
             scales: {
                 y: {
                     beginAtZero: true
@@ -90,6 +96,25 @@ Summary
             }
         }
     });
+
+    // Get the chart option dropdown menu
+    const chartDropdown= document.getElementById('dropdown-chart');
+    console.log(chartDropdown)
+
+    // Add an event listener to detect when the chart dropdown filter changes
+    chartDropdown.addEventListener('change', function() {
+        // Show the Pie Chart and hide the Bar Chart if the pie option is selected (default)
+        if (chartDropdown.value === "pie") {
+            document.getElementById('pieChart').style.display = "block"
+            document.getElementById('barChart').style.display = "none"
+        }
+        // Show the Bar Chart and hide the Pie Chart if the bar option is selected
+        else if (chartDropdown.value === "bar") {
+            document.getElementById('pieChart').style.display = "none"
+            document.getElementById('barChart').style.display = "block"
+        }
+    });
+
 </script>
 
 {% endblock %}

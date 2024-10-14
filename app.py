@@ -486,7 +486,6 @@ def summary():
     expenses_by_category = cursor.fetchall()
 
     expenses_by_category = [tuple(row) for row in expenses_by_category]
-    print(expenses_by_category)
 
     return render_template("summary.html", expenses=expenses_by_category)
 
