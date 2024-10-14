@@ -20,9 +20,58 @@ Summary
     </form>
 </div>
 <div class="summary-container-graphs">
-
+    <canvas id="pieChart"></canvas>
+    <canvas id="barChart"></canvas>
 </div>
 <div class="summary-container-expenses">
 
 </div>
+
+<script>
+    const expenses = {{ expenses | tojson }};
+
+    console.log(expenses)
+    console.log(typeof(expenses))
+
+    
+    var barColors = [
+        "#b91d47",
+        "#00aba9",
+        "#2b5797",
+        "#e8c3b9",
+        "#1e7145"
+        ];
+
+    const categories = expenses.map(e => e[0]);
+    const totals = expenses.map(e => e[1]);
+
+    console.log(categories)
+    console.log(totals)
+
+    // Create the pie chart
+    const ctxPie = document.getElementById('pieChart').getContext('2d');
+    const pieChart = new Chart(ctxPie, {
+        type: 'pie',
+        data: {
+            labels: categories,
+            datasets: [{
+                data: totals,
+                backgroundColor: barColors,
+            }]
+        },
+        options: {
+            title: {
+                display: true,
+                text: "Basic Pie Chart"
+            },
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+            }
+        }
+    });
+</script>
+
 {% endblock %}

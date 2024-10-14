@@ -460,7 +460,33 @@ def delete(transaction_id):
 @app.route('/summary', methods = ["GET", "POST"])
 @login_required
 def summary():
+
+    # Get database connection 
+    db = get_db()
+
+    # Create a cursor
+    cursor = db.cursor()
+
     if request.method == "POST":
+
+        year = request.form.get("year")
+        month = request.form.get("month")
+
+
         return redirect("/summary")
-    return render_template("summary.html")
+
+    # Fetch total expenses by category for the current month
+    query = """
+    SELECT category, SUM(amount) as total
+    FROM expenses
+    WHERE user_id = ? AND strftime('%Y-%m', date) = strftime('%Y-%m', 'now')
+    GROUP BY category
+    """
+    cursor.execute(query, (session['user_id'],))
+    expenses_by_category = cursor.fetchall()
+
+    expenses_by_category = [tuple(row) for row in expenses_by_category]
+    print(expenses_by_category)
+
+    return render_template("summary.html", expenses=expenses_by_category)
 
