@@ -48,19 +48,27 @@ Summary
 
 <script>
     const expenses = {{ expenses | tojson }};
+    console.log(expenses.length)
 
     // Colors used for the pie chart 
     var barColors = [
-        "#b91d47",
-        "#00aba9",
-        "#2b5797",
-        "#e8c3b9",
-        "#1e7145"
-        ];
+        "#b91d47", "#00aba9", "#2b5797", "#e8c3b9", "#1e7145",
+        "#f44336", "#e91e63", "#9c27b0", "#3f51b5", "#607d8b",
+        "#2196f3", "#00bcd4", "#009688", "#4caf50", "#8bc34a", 
+        "#ffeb3b", "#ffc107", "#ff9800", "#ff5722", "#795548"
+        ]; 
+
+    // Function to cycle through colors based on index
+    function getBarColor(index) {
+        return barColors[index % barColors.length]; 
+    }
 
     // Create arrays containing the categories and expenses of the user that month
     const categories = expenses.map(e => e[0]);
     const totals = expenses.map(e => e[1]);
+
+    // Map the categories to corresponding colors using the getBarColor function
+    var backgroundColors = categories.map((category, index) => getBarColor(index));
 
     // Create the pie chart
     const ctxPie = document.getElementById('pieChart').getContext('2d');
@@ -70,7 +78,7 @@ Summary
             labels: categories,
             datasets: [{
                 data: totals,
-                backgroundColor: barColors,
+                backgroundColor: backgroundColors,
             }]
         },
         options: {
@@ -95,7 +103,7 @@ Summary
             labels: categories,
             datasets: [{
                 data: totals,
-                backgroundColor: barColors,
+                backgroundColor: backgroundColors,
                 borderColor: ["#36a2eb"],
                 borderWidth: 1
             }]
@@ -112,7 +120,6 @@ Summary
 
     // Get the chart option dropdown menu
     const chartDropdown= document.getElementById('dropdown-chart');
-    console.log(chartDropdown)
 
     // Add an event listener to detect when the chart dropdown filter changes
     chartDropdown.addEventListener('change', function() {
