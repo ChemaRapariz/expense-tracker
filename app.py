@@ -467,13 +467,92 @@ def summary():
     # Create a cursor
     cursor = db.cursor()
 
+    # Fetch the available years to the user
+    year_query = """
+    SELECT DISTINCT strftime('%Y', date) AS year
+    FROM expenses
+    WHERE user_id = ?
+    ORDER BY year DESC
+    """
+
+    cursor.execute(year_query, (session['user_id'],))
+
+    # This will return a list of years 
+    years = cursor.fetchall()
+    valid_years = [year[0] for year in years]
+    
+    # Create dictionary for each month
+    valid_months_name = {
+        1: "January", 2: "February", 3: "March", 4: "April", 5: "May", 
+        6: "June", 7: "July", 8: "August", 9: "September", 10: "October", 
+        11: "November", 12: "December"      
+    }   
+
     if request.method == "POST":
 
-        year = request.form.get("year")
-        month = request.form.get("month")
+        selected_year = request.form.get("year")
+        selected_month = request.form.get("month")
+
+        # Ensure the user selects a valid year 
+        if selected_year not in valid_years:
+            flash("Please select a valid year")
+            return redirect("/summary")
+
+        # Sanitize and validate the month
+        valid_months = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]
+
+        # If no month selected the user wants to view the overall year data
+        if not selected_month:
+
+            # Fetch total expenses by month for the selected year
+            expenses_by_month_query = """
+            SELECT strftime('%m', date) AS month, SUM(amount) AS total
+            FROM expenses
+            WHERE user_id = ? AND strftime('%Y', date) = ?
+            GROUP BY month
+            ORDER BY month ASC
+            """
+            cursor.execute(expenses_by_month_query, (session['user_id'], selected_year))
+            expenses_by_month = cursor.fetchall()
+
+            # List of tuples
+            expenses_by_month = [tuple(row) for row in expenses_by_month]
+
+            # Initialize a dictionary to hold all months with default expense 0
+            all_months_expenses = {month:0 for month in range(1, 13)}
+
+            # Update the dictionary with actual expenses from expenses_by_month
+            for month_str, total in expenses_by_month:
+                all_months_expenses[int(month_str)] = total
+
+            # Transform the list of tuples to replace month number with the month name
+            expenses_with_month_names = [
+                (valid_months_name[month], total) for month, total in all_months_expenses.items()
+            ]
+
+            flash(f"Summary of <span>{selected_year}</span> by <span>MONTHS</span>")
+            return render_template("summary.html", expenses=expenses_with_month_names, years=valid_years)
+        elif selected_month not in valid_months:
+            flash("Please select a valid month")
+            return redirect("/summary")
+        else:
+
+            # Fetch total expenses by category for the selected month
+            query = """
+            SELECT category, SUM(amount) as total
+            FROM expenses
+            WHERE user_id = ? AND strftime('%Y', date) = ? AND strftime('%m', date) = ?
+            GROUP BY category
+            """
+            cursor.execute(query, (session['user_id'], selected_year, selected_month))
+            expenses_by_category = cursor.fetchall()
+
+            expenses_by_category = [tuple(row) for row in expenses_by_category]
+
+            flash(f"Summary of <span>{valid_months_name[int(selected_month)]}-{selected_year}</span> by <span>CATEGORIES</span>")
+            return render_template("summary.html", expenses=expenses_by_category, years=valid_years)
 
 
-        return redirect("/summary")
 
     # Fetch total expenses by category for the current month
     query = """
@@ -487,5 +566,10 @@ def summary():
 
     expenses_by_category = [tuple(row) for row in expenses_by_category]
 
-    return render_template("summary.html", expenses=expenses_by_category)
+    # Get the current year and month
+    current_year = datetime.now().year
+    current_month = datetime.now().month
+
+    flash(f"Summary of <span>{valid_months_name[current_month]}-{current_year}</span> by <span>CATEGORIES</span>")
+    return render_template("summary.html", expenses=expenses_by_category, years=valid_years)
 

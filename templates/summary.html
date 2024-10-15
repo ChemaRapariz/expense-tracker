@@ -9,14 +9,27 @@ Summary
 <div class="summary-container-options">
     <form class="form-v2" action="/summary" method="post">
         <select id="dropdown-year" class="filter" name="year">
-            <!-- {% for year in years %} -->
-            <!-- <option value="{{ year }}">{{ year }}</option> -->
-            <!-- {% endfor %} -->
-            <option value="2024">2024</option>
+            <option value="" disabled selected>Select Year</option>
+            {% for year in years %}
+            <option value="{{ year }}">{{ year }}</option>
+            {% endfor %}
         </select>
         <select id="dropdown-month" class="filter" name="month">
+            <option value="" disabled selected>Select Month</option>
             <option value="01">January</option>
+            <option value="02">February</option>
+            <option value="03">March</option>
+            <option value="04">April</option>
+            <option value="05">May</option>
+            <option value="06">June</option>
+            <option value="07">July</option>
+            <option value="08">August</option>
+            <option value="09">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
         </select>
+        <input class="filter" type="submit" value="Show">
     </form>
 </div>
 <div class="summary-container-option">
