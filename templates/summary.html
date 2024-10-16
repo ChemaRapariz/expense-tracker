@@ -8,12 +8,16 @@ Summary
 <h1>Summary</h1>
 <div class="summary-container-options">
     <form class="form-v2" action="/summary" method="post">
-        <select id="dropdown-year" class="filter" name="year">
-            <option value="" disabled selected>Select Year</option>
-            {% for year in years %}
-            <option value="{{ year }}">{{ year }}</option>
-            {% endfor %}
-        </select>
+        <div style="position: relative;">
+            <select id="dropdown-year" class="filter" name="year">
+                <option value="" disabled selected>Select Year</option>
+                {% for year in years %}
+                <option value="{{ year }}">{{ year }}</option>
+                {% endfor %}
+            </select>
+            <i id="summarytip-icon" class="fa-solid fa-circle-info"></i>
+            <div id="summarytip-text">If only the year is set we will display a summary of that year</div>
+        </div>
         <select id="dropdown-month" class="filter" name="month">
             <option value="" disabled selected>Select Month</option>
             <option value="01">January</option>
