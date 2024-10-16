@@ -24,3 +24,6 @@ __pycache__/
 
 #Ignore flask sessions
 flask_sessions/
+
+# Ignore phpliteadmin files
+phpliteadmin-dev/
