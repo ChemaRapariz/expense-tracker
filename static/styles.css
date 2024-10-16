@@ -247,44 +247,18 @@ canvas {
 /* Responsive */
 
 /* ---- For mobile phones ---- */
-#screen-nav-xmark {
-    display: none;
-}
 
-#screen-nav-menu {
-    display: none;
-}
-
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 700px) {
 
     main {
         padding: 1rem;
     }
 
     /* ---- Navigation Bar ----- */
-    #screen-nav-xmark {
-        display: block;
-        font-size: 25px;
-    }
-
-    #screen-nav-menu {
-        display: block;
-        font-size: 25px;
-    }
 
     .div-nav-login {
         overflow: scroll;
     }
-
-    /* nav ul {
-        background: #6f7375;
-        position: fixed;
-        top: 0;
-        right: 0;
-        width: 200px;
-        height: 100vh;
-        padding-top: 50px;
-    } */
 
     /* ----- Homepage table ----- */
     #index-message {
@@ -315,5 +289,24 @@ canvas {
 
     .section-expenses {
         margin-top: 30px;
+    }
+
+    /* ---- History section ----- */
+    #history-date-info {
+        display: none;
+    }
+
+    .form-v2 {
+        overflow: scroll;
+        flex-wrap: wrap;
+    }
+    td:nth-child(6) {
+        min-width: 10px; !important
+    }
+
+    /* ----- Add section ----- */
+    #tooltip-text {
+        left: 130px;
+        top: 12px;
     }
 }
