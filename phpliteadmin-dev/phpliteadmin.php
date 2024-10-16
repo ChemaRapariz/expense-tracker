@@ -59,10 +59,6 @@ $databases = array(
 		'path'=> '/Users/chemarapariz/Documents/expense-tracker/expenses.db',
 		'name'=> 'Expenses Database'
 	),
-	array(
-		'path'=> 'database2.sqlite',
-		'name'=> 'Database 2'
-	),
 );
 
 
