@@ -51,7 +51,7 @@ Summary
 </div>
 
 <script>
-    const expenses = {{ expenses | tojson }};
+    const expenses = JSON.parse('{{ expenses | tojson | safe }}');
     console.log(expenses.length)
 
     // Colors used for the pie chart 
