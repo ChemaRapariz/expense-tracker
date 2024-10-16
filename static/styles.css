@@ -48,6 +48,23 @@ span {
     text-decoration: none;
     color: black;
 }
+.div-nav-login nav ul li {
+    position: relative;
+}
+.div-nav-login nav ul li::after {
+    content: '';
+    width: 0;
+    height: 3px;
+    background: #6f7375;
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    transition: 0.5s;
+}
+
+.div-nav-login nav ul li:hover::after{
+    width: 100%;
+}
 
 .div-nav-login nav i{
     font-size: 50px;
