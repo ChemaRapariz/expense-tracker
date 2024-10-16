@@ -91,7 +91,17 @@ def index():
     daily_expenses = round(total_expenses / days_in_month, 2) if days_in_month > 0 else 0
  
 
-    return render_template("index.html", rows=rows, total_expenses=total_expenses, daily_expenses=daily_expenses)
+     # Create dictionary for each month
+    valid_months_name = {
+        1: "January", 2: "February", 3: "March", 4: "April", 5: "May", 
+        6: "June", 7: "July", 8: "August", 9: "September", 10: "October", 
+        11: "November", 12: "December"      
+    }  
+    # Get the name of the current month 
+    current_month_name = valid_months_name[current_month]
+
+
+    return render_template("index.html", rows=rows, total_expenses=total_expenses, daily_expenses=daily_expenses, current_month=current_month_name, current_year=current_year)
 
 @app.route('/login', methods=["GET", "POST"])
 def login():

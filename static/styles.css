@@ -104,6 +104,13 @@ tr:nth-child(even) {
     background-color: #dddddd;
 }
 
+#index-message {
+    display: flex;
+    justify-content: flex-start;
+    color: #6f7375;
+    font-style: italic;
+}
+
 /* ---- Expenses section (homepage)---- */
 .section-expenses {
     flex-basis: 40%;
