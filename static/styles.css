@@ -96,7 +96,6 @@ main {
 }
 .container {
     display: flex;
-    width: 90%;
     justify-content: center;
     margin-right: auto;
     margin-left: auto;
@@ -126,6 +125,7 @@ tr:nth-child(even) {
     justify-content: flex-start;
     color: #6f7375;
     font-style: italic;
+    margin-bottom: 20px;
 }
 
 /* ---- Expenses section (homepage)---- */
@@ -244,3 +244,76 @@ canvas {
     margin-top: 20px;
 }
 
+/* Responsive */
+
+/* ---- For mobile phones ---- */
+#screen-nav-xmark {
+    display: none;
+}
+
+#screen-nav-menu {
+    display: none;
+}
+
+@media only screen and (max-width: 600px) {
+
+    main {
+        padding: 1rem;
+    }
+
+    /* ---- Navigation Bar ----- */
+    #screen-nav-xmark {
+        display: block;
+        font-size: 25px;
+    }
+
+    #screen-nav-menu {
+        display: block;
+        font-size: 25px;
+    }
+
+    .div-nav-login {
+        overflow: scroll;
+    }
+
+    /* nav ul {
+        background: #6f7375;
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 200px;
+        height: 100vh;
+        padding-top: 50px;
+    } */
+
+    /* ----- Homepage table ----- */
+    #index-message {
+        display: block;
+    }
+    .container {
+        display: block;
+    }
+    .section-table {
+        overflow: scroll;
+    }
+    td, th {
+        padding: 13px 2px;
+    }
+    td:nth-child(2), th:nth-child(2),
+    td:nth-child(4), th:nth-child(4) {
+        display: none;
+    }
+    td:nth-child(1), th:nth-child(1) {
+        width: 45%;
+    }
+    td:nth-child(3), th:nth-child(3) {
+        width: 25%;
+    }
+    td:nth-child(5), th:nth-child(5) {
+        width: 30%;
+    }
+
+    .section-expenses {
+        margin-top: 30px;
+    }
+}
