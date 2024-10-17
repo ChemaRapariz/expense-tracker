@@ -284,6 +284,10 @@ canvas {
     .div-nav-login {
         overflow: scroll;
     }
+    .div-nav-login nav ul a {
+        padding: 3px;
+        font-size: 15px;
+    }
 
     /* ----- Homepage table ----- */
     #index-message {
