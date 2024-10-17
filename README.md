@@ -1,5 +1,5 @@
 # Expense Tracker
-#### Video Demo:  <URL HERE>[URL HERE]
+#### Video Demo:  [https://youtu.be/2jv0zKxW7Qk](https://youtu.be/2jv0zKxW7Qk)
 
 Expense Tracker is a web application that allows users to manage their personal finances by tracking expenses, categorizing them, and visualizing spending through charts. It helps users monitor their budget, analyze spending habits, and gain insights into their financial behavior.
 
