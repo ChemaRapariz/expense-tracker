@@ -28,21 +28,21 @@ Expense Tracker is a web application that allows users to manage their personal 
 ![Login Screen](screenshots/login.png)
 
 2. Visualize the 6 most recent expenses for the current month in the homepage table
+3. Check the total amount of expenses and the daily average of the current month
 
 ![Homepage Screen](screenshots/homepage.png)
 
-3. Check the total amount of expenses and the daily average of the current month
 4. Add expenses by entering the category, note (optional), amount, payment method and date
 
 ![Add Expense Screen](screenshots/add.png)
 
 5. View a detailed history of your expenses and filter them by date, category, amount and payment method
-
-![History Screen](screenshots/history.png)
-
 6. Search for expenses by setting its specific date and/or category in the history section
 7. Set the number of entries that should be displayed and the order (descending or ascending) in your query
 8. Delete expenses by clicking on the garbage icon next to the entry from the history page
+
+![History Screen](screenshots/history.png)
+
 9. Visualize a bar(column) chart or pie chart in the summary section
 
 ![Bar Chart by Categories](screenshots/summary-bar-categories.png)
